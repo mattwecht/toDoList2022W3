@@ -9,13 +9,24 @@ import UIKit
 
 class ToDoTableViewController: UITableViewController {
 
-    var toDos : [ToDo] = []//creates an empty array of the class that we made
-    
+    //var toDos : [ToDo] = []//creates an empty array of the class that we made
+    var toDos : [ToDoCD] = []
     override func viewDidLoad() {
         super.viewDidLoad()
-        toDos = createToDos()
+        //toDos = createToDos()
+        getToDos()
 
     }//view did load ends
+    
+    func getToDos(){
+        if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext{
+            if let coreDataToDos = try? context.fetch(ToDoCD.fetchRequest()) as? [ToDoCD]{
+                    toDos = coreDataToDos
+                    tableView.reloadData()
+            }
+        }
+        
+    }
     
     func createToDos() -> [ToDo]{
         let crime = ToDo()
